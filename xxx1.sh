@@ -26,8 +26,13 @@ sudo ufw allow 8181/tcp
 yes | sudo ufw enable
 sudo ufw status
 
+echo "=== 设置文件打开数限制（永久） ==="
+if ! grep -q '^* soft nofile 65535' /etc/security/limits.conf; then
+    echo '* soft nofile 65535' >> /etc/security/limits.conf
+    echo '* hard nofile 65535' >> /etc/security/limits.conf
+fi
+
 echo "=== 清空并写入 config.json ==="
-> config.json
 cat > config.json << 'EOF'
 {
     "api": {
@@ -75,11 +80,12 @@ cat > config.json << 'EOF'
 }
 EOF
 
-echo "=== 提高文件打开数限制 ==="
-ulimit -n 65535
+echo "=== 手动检测 xmrig-proxy 可执行性 ==="
+./xmrig-proxy --help > /dev/null 2>&1 || { echo "xmrig-proxy 启动失败，检查依赖"; exit 1; }
 
 echo "=== 启动 xmrig-proxy ==="
-screen -dmS proxy bash -c "nohup ./xmrig-proxy > proxy.log 2>&1 &"
+screen -dmS proxy bash -c "ulimit -n 65535 && nohup ./xmrig-proxy > proxy.log 2>&1 &"
+
 echo "=== 部署完成 ==="
 echo "查看运行日志: cd ~/xmrig-proxy-deploy/xmrig-proxy-6.22.0 && tail -f proxy.log"
 echo "进入 screen 会话: screen -r proxy"
