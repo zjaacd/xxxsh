@@ -1,22 +1,26 @@
 #!/bin/bash
 set -e
 
-echo "=== 更新软件包并安装依赖 ==="
+XM_DIR="/root/xmrig-proxy-deploy/xmrig-proxy-6.22.0"
+XM_BIN="$XM_DIR/xmrig-proxy"
+
+echo "=== 更新系统和安装依赖 ==="
 apt update -y
-apt install -y curl socat wget screen sudo iptables ufw
+apt install -y curl socat wget screen sudo iptables ufw libssl-dev libhwloc-dev
 
 echo "=== 设置 /root 权限 ==="
 chmod 777 /root
 
 echo "=== 创建部署目录 ==="
-mkdir -p ~/xmrig-proxy-deploy
-cd ~/xmrig-proxy-deploy
+mkdir -p /root/xmrig-proxy-deploy
+cd /root/xmrig-proxy-deploy
 
-echo "=== 下载 xmrig-proxy ==="
+echo "=== 下载并解压 xmrig-proxy ==="
 wget -q https://github.com/xmrig/xmrig-proxy/releases/download/v6.22.0/xmrig-proxy-6.22.0-linux-static-x64.tar.gz
 tar -zxf xmrig-proxy-6.22.0-linux-static-x64.tar.gz
-cd xmrig-proxy-6.22.0
-chmod +x xmrig-proxy
+
+echo "=== 赋予执行权限 ==="
+chmod +x "$XM_BIN"
 
 echo "=== 配置防火墙 ==="
 sudo ufw allow ssh
@@ -26,14 +30,14 @@ sudo ufw allow 8181/tcp
 yes | sudo ufw enable
 sudo ufw status
 
-echo "=== 设置文件打开数限制（永久） ==="
+echo "=== 永久设置文件打开数限制 ==="
 if ! grep -q '^* soft nofile 65535' /etc/security/limits.conf; then
     echo '* soft nofile 65535' >> /etc/security/limits.conf
     echo '* hard nofile 65535' >> /etc/security/limits.conf
 fi
 
-echo "=== 清空并写入 config.json ==="
-cat > config.json << 'EOF'
+echo "=== 写入 config.json ==="
+cat > "$XM_DIR/config.json" << 'EOF'
 {
     "api": {
         "id": null,
@@ -80,12 +84,16 @@ cat > config.json << 'EOF'
 }
 EOF
 
-echo "=== 手动检测 xmrig-proxy 可执行性 ==="
-./xmrig-proxy --help > /dev/null 2>&1 || { echo "xmrig-proxy 启动失败，检查依赖"; exit 1; }
-
 echo "=== 启动 xmrig-proxy ==="
-screen -dmS proxy bash -c "ulimit -n 65535 && nohup ./xmrig-proxy > proxy.log 2>&1 &"
+screen -dmS proxy bash -c "cd $XM_DIR && ulimit -n 65535 && nohup ./xmrig-proxy > proxy.log 2>&1 &"
+
+sleep 3
+echo "=== 查看 xmrig-proxy 进程 ==="
+ps aux | grep xmrig-proxy | grep -v grep
+
+echo "=== 查看启动日志尾部 ==="
+tail -n 20 "$XM_DIR/proxy.log"
 
 echo "=== 部署完成 ==="
-echo "查看运行日志: cd ~/xmrig-proxy-deploy/xmrig-proxy-6.22.0 && tail -f proxy.log"
-echo "进入 screen 会话: screen -r proxy"
+echo "进入 screen 会话： screen -r proxy"
+echo "查看日志： tail -f $XM_DIR/proxy.log"
