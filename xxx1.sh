@@ -62,7 +62,7 @@ cat > "$XM_DIR/config.json" << 'EOF'
             "algo": "rx/0",
             "coin": "monero",
             "url": "pool.supportxmr.com:3333",
-            "user": "8643J3zYd4Kh7aREJoY6qT9W4kBRvF2M9aD2qAywurn19YX9wkY5vnrWq51EC2S1tLQi5pAgBLvfFhCWv1UpC73DMYvHup6.test",
+            "user": "8643J3zYd4Kh7aREJoY6qT9W4kBRvF2M9aD2qAywurn19YX9wkY5vnrWq51EC2S1tLQi5pAgBLvfFhCWv1UpC73DMYvHup6.xxx1",
             "pass": "x",
             "rig-id": null,
             "keepalive": true,
@@ -85,15 +85,17 @@ cat > "$XM_DIR/config.json" << 'EOF'
 EOF
 
 echo "=== 启动 xmrig-proxy ==="
-screen -dmS proxy bash -c "cd $XM_DIR && ulimit -n 65535 && nohup ./xmrig-proxy > proxy.log 2>&1 &"
+screen -dmS proxy bash -c "cd $XM_DIR && ulimit -n 65535 && ./xmrig-proxy > proxy.log 2>&1"
 
-sleep 3
-echo "=== 查看 xmrig-proxy 进程 ==="
-ps aux | grep xmrig-proxy | grep -v grep
+sleep 5
 
-echo "=== 查看启动日志尾部 ==="
-tail -n 20 "$XM_DIR/proxy.log"
+echo "=== 检测 xmrig-proxy 进程 ==="
+if pgrep -f xmrig-proxy > /dev/null; then
+    echo "xmrig-proxy 启动成功！"
+else
+    echo "xmrig-proxy 启动失败，请检查日志：$XM_DIR/proxy.log"
+fi
 
 echo "=== 部署完成 ==="
-echo "进入 screen 会话： screen -r proxy"
-echo "查看日志： tail -f $XM_DIR/proxy.log"
+echo "查看运行日志：tail -f $XM_DIR/proxy.log"
+echo "进入 screen 会话：screen -r proxy"
