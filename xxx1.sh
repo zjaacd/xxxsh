@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-XM_DIR="/root/xmrig-proxy-deploy/xmrig-proxy-6.24.0"
+XM_DIR="/root/xmrig-proxy-deploy/xmrig-proxy-6.22.0"
 XM_BIN="$XM_DIR/xmrig-proxy"
 
 echo "=== 更新系统和安装依赖 ==="
