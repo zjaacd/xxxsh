@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-XM_DIR="/root/xmrig-proxy-deploy/xmrig-proxy-6.22.0"
+XM_DIR="/root/xmrig-proxy-deploy/xmrig-proxy-6.24.0"
 XM_BIN="$XM_DIR/xmrig-proxy"
 
 echo "=== 更新系统和安装依赖 ==="
@@ -16,8 +16,8 @@ mkdir -p /root/xmrig-proxy-deploy
 cd /root/xmrig-proxy-deploy
 
 echo "=== 下载并解压 xmrig-proxy ==="
-wget -q https://github.com/xmrig/xmrig-proxy/releases/download/v6.22.0/xmrig-proxy-6.22.0-linux-static-x64.tar.gz
-tar -zxf xmrig-proxy-6.22.0-linux-static-x64.tar.gz
+wget -q https://github.com/xmrig/xmrig-proxy/releases/download/v6.24.0/xmrig-proxy-6.24.0-linux-static-x64.tar.gz
+tar -zxf xmrig-proxy-6.24.0-linux-static-x64.tar.gz
 
 echo "=== 赋予执行权限 ==="
 chmod +x "$XM_BIN"
@@ -62,7 +62,7 @@ cat > "$XM_DIR/config.json" << 'EOF'
             "algo": "rx/0",
             "coin": "monero",
             "url": "pool.supportxmr.com:3333",
-            "user": "8643J3zYd4Kh7aREJoY6qT9W4kBRvF2M9aD2qAywurn19YX9wkY5vnrWq51EC2S1tLQi5pAgBLvfFhCWv1UpC73DMYvHup6.xxx2",
+            "user": "8643J3zYd4Kh7aREJoY6qT9W4kBRvF2M9aD2qAywurn19YX9wkY5vnrWq51EC2S1tLQi5pAgBLvfFhCWv1UpC73DMYvHup6.xxx1",
             "pass": "x",
             "rig-id": null,
             "keepalive": true,
