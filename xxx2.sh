@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-XM_DIR="/root/xmrig-proxy-deploy/xmrig-proxy-6.24.0"
+XM_DIR="/root/xmrig-proxy-deploy/xmrig-proxy-6.22.0"
 XM_BIN="$XM_DIR/xmrig-proxy"
 
 echo "=== 更新系统和安装依赖 ==="
@@ -16,8 +16,8 @@ mkdir -p /root/xmrig-proxy-deploy
 cd /root/xmrig-proxy-deploy
 
 echo "=== 下载并解压 xmrig-proxy ==="
-wget -q https://github.com/xmrig/xmrig-proxy/releases/download/v6.24.0/xmrig-proxy-6.24.0-linux-static-x64.tar.gz
-tar -zxf xmrig-proxy-6.24.0-linux-static-x64.tar.gz
+wget -q https://github.com/xmrig/xmrig-proxy/releases/download/v6.22.0/xmrig-proxy-6.22.0-linux-static-x64.tar.gz
+tar -zxf xmrig-proxy-6.22.0-linux-static-x64.tar.gz
 
 echo "=== 赋予执行权限 ==="
 chmod +x "$XM_BIN"
