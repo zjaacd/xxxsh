@@ -1,18 +1,12 @@
 #!/bin/bash
 set -e
 
-XM_VERSION="6.24.0"
-XM_DIR="/root/xmrig-proxy-deploy/xmrig-proxy-$XM_VERSION"
+XM_DIR="/root/xmrig-proxy-deploy/xmrig-proxy-6.22.0"
 XM_BIN="$XM_DIR/xmrig-proxy"
 
 echo "=== 更新系统和安装依赖 ==="
 apt update -y
 apt install -y curl socat wget screen sudo iptables ufw libssl-dev libhwloc-dev
-
-echo "=== 关闭防火墙，确保端口全开放 ==="
-ufw disable || true
-iptables -F
-ip6tables -F
 
 echo "=== 设置 /root 权限 ==="
 chmod 777 /root
@@ -22,13 +16,19 @@ mkdir -p /root/xmrig-proxy-deploy
 cd /root/xmrig-proxy-deploy
 
 echo "=== 下载并解压 xmrig-proxy ==="
-if [ ! -d "$XM_DIR" ]; then
-    wget -q https://github.com/xmrig/xmrig-proxy/releases/download/v$XM_VERSION/xmrig-proxy-$XM_VERSION-linux-static-x64.tar.gz
-    tar -zxf xmrig-proxy-$XM_VERSION-linux-static-x64.tar.gz
-fi
+wget -q https://github.com/xmrig/xmrig-proxy/releases/download/v6.22.0/xmrig-proxy-6.22.0-linux-static-x64.tar.gz
+tar -zxf xmrig-proxy-6.22.0-linux-static-x64.tar.gz
 
 echo "=== 赋予执行权限 ==="
 chmod +x "$XM_BIN"
+
+echo "=== 配置防火墙 ==="
+sudo ufw allow ssh
+sudo ufw allow 22/tcp
+sudo ufw allow 7777/tcp
+sudo ufw allow 8181/tcp
+yes | sudo ufw enable
+sudo ufw status
 
 echo "=== 永久设置文件打开数限制 ==="
 if ! grep -q '^* soft nofile 65535' /etc/security/limits.conf; then
@@ -84,9 +84,6 @@ cat > "$XM_DIR/config.json" << 'EOF'
 }
 EOF
 
-echo "=== 停止已有的 screen 会话（防止冲突） ==="
-screen -S proxy -X quit || true
-
 echo "=== 启动 xmrig-proxy ==="
 screen -dmS proxy bash -c "cd $XM_DIR && ulimit -n 65535 && ./xmrig-proxy > proxy.log 2>&1"
 
@@ -95,9 +92,6 @@ sleep 5
 echo "=== 检测 xmrig-proxy 进程 ==="
 if pgrep -f xmrig-proxy > /dev/null; then
     echo "xmrig-proxy 启动成功！"
-    SERVER_IP=$(curl -s ifconfig.me || echo "服务器IP")
-    echo "Web 管理界面: http://$SERVER_IP:8181"
-    echo "矿工连接地址: $SERVER_IP:7777"
 else
     echo "xmrig-proxy 启动失败，请检查日志：$XM_DIR/proxy.log"
 fi
