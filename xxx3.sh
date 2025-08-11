@@ -62,7 +62,7 @@ cat > "$XM_DIR/config.json" << 'EOF'
             "algo": "rx/0",
             "coin": "monero",
             "url": "pool.supportxmr.com:3333",
-            "user": "8643J3zYd4Kh7aREJoY6qT9W4kBRvF2M9aD2qAywurn19YX9wkY5vnrWq51EC2S1tLQi5pAgBLvfFhCWv1UpC73DMYvHup6.xxx1",
+            "user": "8643J3zYd4Kh7aREJoY6qT9W4kBRvF2M9aD2qAywurn19YX9wkY5vnrWq51EC2S1tLQi5pAgBLvfFhCWv1UpC73DMYvHup6.xxx3",
             "pass": "x",
             "rig-id": null,
             "keepalive": true,
