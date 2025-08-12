@@ -39,78 +39,49 @@ fi
 echo "=== 写入 config.json ==="
 cat > "$XM_DIR/config.json" << 'EOF'
 {
-  "api": {
-    "id": null,
-    "worker-id": null
-  },
-  "http": {
-    "enabled": true,
-    "host": "0.0.0.0",
-    "port": 8181,
-    "access-token": null,
-    "restricted": true
-  },
-  "autosave": true,
-  "colors": true,
-  "title": true,
-  "version": 1,
-  "bind": [
-    "0.0.0.0:7777"
-  ],
-  "pools": [
-    {
-      "algo": "rx/0",
-      "coin": "monero",
-      "url": "auto.c3pool.org:33333",
-      "user": "8643J3zYd4Kh7aREJoY6qT9W4kBRvF2M9aD2qAywurn19YX9wkY5vnrWq51EC2S1tLQi5pAgBLvfFhCWv1UpC73DMYvHup6.az100",
-      "pass": "x",
-      "rig-id": null,
-      "keepalive": true,
-      "enabled": true,
-      "tls": true,
-      "tls-fingerprint": null,
-      "daemon": false,
-      "daemon-poll-interval": 1000
+    "api": {
+        "id": null,
+        "worker-id": null
     },
-    {
-      "algo": "rx/0",
-      "coin": "monero",
-      "url": "auto.c3pool.org:443",
-      "user": "8643J3zYd4Kh7aREJoY6qT9W4kBRvF2M9aD2qAywurn19YX9wkY5vnrWq51EC2S1tLQi5pAgBLvfFhCWv1UpC73DMYvHup6.az100",
-      "pass": "x",
-      "rig-id": null,
-      "keepalive": true,
-      "enabled": true,
-      "tls": false,
-      "tls-fingerprint": null,
-      "daemon": false,
-      "daemon-poll-interval": 1000
+    "http": {
+        "enabled": true,
+        "host": "0.0.0.0",
+        "port": 8181,
+        "access-token": null,
+        "restricted": true
     },
-    {
-      "algo": "rx/0",
-      "coin": "monero",
-      "url": "auto.c3pool.org:19999",
-      "user": "8643J3zYd4Kh7aREJoY6qT9W4kBRvF2M9aD2qAywurn19YX9wkY5vnrWq51EC2S1tLQi5pAgBLvfFhCWv1UpC73DMYvHup6.az100",
-      "pass": "x",
-      "rig-id": null,
-      "keepalive": true,
-      "enabled": true,
-      "tls": false,
-      "tls-fingerprint": null,
-      "daemon": false,
-      "daemon-poll-interval": 1000
-    }
-  ],
-  "retries": 5,
-  "retry-pause": 5,
-  "verbose": false,
-  "log-file": "xmrig-proxy.log",
-  "syslog": false,
-  "custom-diff": 0,
-  "custom-diff-stats": false,
-  "mode": "simple"
+    "autosave": true,
+    "colors": true,
+    "title": true,
+    "version": 1,
+    "bind": [
+        "0.0.0.0:7777"
+    ],
+    "pools": [
+        {
+            "algo": "rx/0",
+            "coin": "monero",
+            "url": "auto.c3pool.org:19999",
+            "user": "8643J3zYd4Kh7aREJoY6qT9W4kBRvF2M9aD2qAywurn19YX9wkY5vnrWq51EC2S1tLQi5pAgBLvfFhCWv1UpC73DMYvHup6.az200",
+            "pass": "x",
+            "rig-id": null,
+            "keepalive": true,
+            "enabled": true,
+            "tls": false,
+            "tls-fingerprint": null,
+            "daemon": false,
+            "daemon-poll-interval": 1000
+        }
+    ],
+    "retries": 5,
+    "retry-pause": 5,
+    "verbose": false,
+    "log-file": "xmrig-proxy.log",
+    "syslog": false,
+    "custom-diff": 0,
+    "custom-diff-stats": false,
+    "mode": "simple"
 }
-
 EOF
 
 echo "=== 启动 xmrig-proxy ==="
